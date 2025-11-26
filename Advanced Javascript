@@ -1,0 +1,95 @@
+// Core logic for the 24 Game Solver
+const solveBtn = document.getElementById('solve-btn');
+const inputField = document.getElementById('digits-input');
+const resultEl = document.getElementById('result');
+
+solveBtn.addEventListener('click', () => {
+  const input = inputField.value.trim();
+  if (!/^\d{4}$/.test(input)) {
+    resultEl.textContent = 'Please enter exactly four digits (1-9).';
+    return;
+  }
+
+  resultEl.textContent = 'Calculating...';
+  setTimeout(() => {
+    const solution = solve24(input);
+    resultEl.textContent = solution;
+  }, 100);
+});
+
+// Main solver function
+function solve24(numStr) {
+  const digits = numStr.split('');
+  const target = 24;
+  const operators = ['+', '-', '*', '/'];
+
+  // Helper function to evaluate an expression safely
+  function safeEval(expr) {
+    try {
+      return Math.abs(eval(expr) - target) < 1e-6;
+    } catch {
+      return false;
+    }
+  }
+
+  // Generate all permutations of the digits
+  function permute(arr) {
+    const results = [];
+    function backtrack(path, options) {
+      if (options.length === 0) {
+        results.push(path);
+        return;
+      }
+      for (let i = 0; i < options.length; i++) {
+        backtrack(path.concat(options[i]), options.slice(0, i).concat(options.slice(i + 1)));
+      }
+    }
+    backtrack([], arr);
+    return results;
+  }
+
+  // Generate all combinations of operators
+  function opCombinations() {
+    const results = [];
+    for (let op1 of operators) {
+      for (let op2 of operators) {
+        for (let op3 of operators) {
+          results.push([op1, op2, op3]);
+        }
+      }
+    }
+    return results;
+  }
+
+  // Generate all parenthesized expressions
+  function generateExpressions(a, b, c, d, ops) {
+    const [op1, op2, op3] = ops;
+    const aStr = a, bStr = b, cStr = c, dStr = d;
+
+    const exprs = [];
+
+    // Different parenthesizations
+    exprs.push(`((${aStr}${op1}${bStr})${op2}(${cStr}${op3}${dStr}))`);
+    exprs.push(`(${aStr}${op1}(${bStr}${op2}${cStr})){op3}${dStr}`);
+    exprs.push(`${aStr}${op1}(((${bStr}${op2}${cStr})${op3}${dStr}))`);
+    exprs.push(`${aStr}${op1}(${bStr}${op2}(${cStr}${op3}${dStr}))`);
+    exprs.push(`((${aStr}${op1}${bStr})${op2}${cStr})${op3}${dStr}`);
+    return exprs;
+  }
+
+  const permutations = permute(digits);
+  const opCombos = opCombinations();
+
+  for (let perm of permutations) {
+    for (let ops of opCombos) {
+      const [a, b, c, d] = perm;
+      const expressions = generateExpressions(a, b, c, d, ops);
+      for (let expr of expressions) {
+        if (safeEval(expr)) {
+          return expr;
+        }
+      }
+    }
+  }
+  return "no solution exists";
+}
