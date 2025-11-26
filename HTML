@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>24 Game Solver</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Google Fonts for a modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>🧮 24 Game Solver</h1>
+      <p>Unleash your mental math skills! Find solutions to make 24 from four digits.</p>
+    </div>
+  </header>
+
+  <section class="input-section">
+    <div class="container">
+      <h2>Enter Four Digits</h2>
+      <div class="input-group">
+        <input type="text" maxlength="4" id="digits-input" placeholder="e.g., 1234" />
+        <button id="solve-btn">Solve</button>
+      </div>
+      <div class="result-container" id="result-container">
+        <h3>Result:</h3>
+        <p id="result"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="container">
+      <h2>How it Works</h2>
+      <p>This web app generates all permutations, combinations, and parenthesizations of the four input digits with basic arithmetic operations to find a valid expression that evaluates to 24. It uses clever algorithms and modern design to deliver quick and accurate results.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 Creative Devs. Inspired by the classic 24 Game.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
